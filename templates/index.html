@@ -1,0 +1,67 @@
+<html>
+<style>
+  #form {
+    left: 50%;
+    top: 50%;
+    position: absolute;
+    -webkit-transform: translate3d(-50%, -50%, 0);
+    -moz-transform: translate3d(-50%, -50%, 0);
+    transform: translate3d(-50%, -50%, 0);
+  }
+</style>
+
+<head>
+  <title>reCAPTCHA demo: Explicit render after an onload callback</title>
+  <script type="text/javascript">
+    var onloadCallback = function() {
+      grecaptcha.render('html_element', {
+        'sitekey': 'your_site_key'
+      });
+    };
+  </script>
+</head>
+
+<body>
+  <div id="form">
+    <label for="latitude">Latitude:</label>
+    <input type="text" name="latitude" value="0.000" id="latitude" form="form_login"><br><br>
+    <label for="longitude">Longitude:</label>
+    <input type="text" name="longitude" value="0.000" id="longitude" form="form_login"><br><br>
+    <button onclick="getLocation();">Get my location</button><br><br>
+    <form action="/post" method="post" id="form_login">
+      <label for="name">Location Name (clinic name, store, etc):</label>
+      <input type="text" id="name" name="name"><br><br>
+      <label for="name">Resources</label>
+      <select id="resources" name="resources" multiple="multiple">
+        <option value="cv19 Testing">Covid-19 Testing</option>
+        <option value="Gloves">Gloves</option>
+        <option value="Masks">Masks</option>
+        <option value="Antibiotics">Antibiotics</option>
+      </select><br><br>
+      <label for="school">School:</label>
+      <input type="text" id="school" name="school"><br><br>
+      <input type="submit" value="Submit" form="form_login">
+    </form>
+    <!-- reCAPTCHA -->
+    <form action="?" method="POST">
+      <div id="html_element"></div>
+      <br>
+      <input type="submit" value="Submit">
+    </form>
+    <script src="https://www.google.com/recaptcha/api.js?onload=onloadCallback&render=explicit" async defer>
+    </script>
+
+  </div>
+</body>
+
+<script>
+  function getLocation() {
+    navigator.geolocation.getCurrentPosition(function(position) {
+      var coordinates = position.coords;
+      document.getElementById("latitude").value = coordinates.latitude;
+      document.getElementById("longitude").value = coordinates.longitude;
+    });
+  }
+</script>
+
+</html>
